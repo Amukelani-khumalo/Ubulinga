@@ -26,7 +26,7 @@
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
       padding: 1rem 3rem;
-      background: rgba(10,22,40,0.92);
+      background: rgba(10,22,40,0.95);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
@@ -40,9 +40,141 @@
     }
     .nav-logo-text { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; line-height: 1.2; }
     .nav-logo-text span { display: block; font-size: 0.6rem; font-family: 'Inter', sans-serif; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
     .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.5px; transition: color 0.2s; }
     .nav-links a:hover { color: var(--gold); }
+
+    /* DROPDOWN */
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-toggle {
+      color: var(--muted); font-size: 0.85rem; font-weight: 500; letter-spacing: 0.5px;
+      cursor: pointer; display: flex; align-items: center; gap: 5px;
+      transition: color 0.2s; user-select: none; background: none; border: none; padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+    .nav-dropdown-toggle:hover, .nav-dropdown.open .nav-dropdown-toggle { color: var(--gold); }
+    .nav-dropdown-toggle svg { width: 12px; height: 12px; transition: transform 0.2s; }
+    .nav-dropdown.open .nav-dropdown-toggle svg { transform: rotate(180deg); }
+    .nav-dropdown-menu {
+      position: absolute; top: calc(100% + 14px); left: 50%; transform: translateX(-50%);
+      background: rgba(10,22,40,0.98); backdrop-filter: blur(16px);
+      border: 1px solid var(--border); min-width: 220px;
+      opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(-8px);
+      transition: all 0.2s ease; z-index: 200;
+    }
+    .nav-dropdown.open .nav-dropdown-menu { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+    .nav-dropdown-menu::before {
+      content: ''; position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
+      width: 10px; height: 6px;
+      background: var(--border); clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    }
+    .dropdown-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 0.75rem 1rem; cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+      text-decoration: none;
+    }
+    .dropdown-item:last-child { border-bottom: none; }
+    .dropdown-item:hover { background: rgba(201,168,76,0.08); }
+    .dropdown-item-icon { font-size: 1.1rem; width: 24px; text-align: center; flex-shrink: 0; }
+    .dropdown-item-text { flex: 1; }
+    .dropdown-item-label { font-size: 0.85rem; font-weight: 600; color: var(--white); display: block; }
+    .dropdown-item-sub { font-size: 0.7rem; color: var(--muted); display: block; margin-top: 1px; }
+    .dropdown-item:hover .dropdown-item-label { color: var(--gold); }
+
+    /* RESOURCES SECTION */
+    .resources-section { background: var(--navy); }
+    .resources-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; }
+    .resource-card {
+      background: var(--card); border: 1px solid var(--border);
+      padding: 2rem 1.5rem; cursor: pointer;
+      transition: all 0.3s; position: relative; overflow: hidden;
+      display: flex; flex-direction: column; align-items: flex-start; gap: 0.8rem;
+    }
+    .resource-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px; background: var(--gold); transform: scaleX(0); transition: transform 0.3s;
+    }
+    .resource-card:hover { transform: translateY(-5px); border-color: var(--gold); }
+    .resource-card:hover::after { transform: scaleX(1); }
+    .resource-card-icon { font-size: 2.2rem; }
+    .resource-card-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--white); }
+    .resource-card-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+    .resource-card-action { margin-top: auto; font-size: 0.75rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); display: flex; align-items: center; gap: 6px; }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(5,12,25,0.92);
+      z-index: 500; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+      padding: 1rem;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .modal {
+      background: var(--navy2); border: 1px solid var(--border);
+      width: 100%; max-width: 680px; max-height: 88vh;
+      overflow-y: auto; position: relative;
+      transform: translateY(30px); transition: transform 0.3s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-header {
+      padding: 2rem 2rem 1.5rem; border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem;
+      position: sticky; top: 0; background: var(--navy2); z-index: 10;
+    }
+    .modal-title-group { display: flex; align-items: center; gap: 1rem; }
+    .modal-icon { font-size: 2rem; }
+    .modal-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; }
+    .modal-subtitle { font-size: 0.78rem; color: var(--muted); letter-spacing: 1px; margin-top: 2px; }
+    .modal-close {
+      background: none; border: 1px solid var(--border); color: var(--muted);
+      width: 36px; height: 36px; cursor: pointer; font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .modal-close:hover { border-color: var(--gold); color: var(--gold); }
+    .modal-body { padding: 2rem; }
+
+    /* Modal content items */
+    .modal-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.2rem; background: var(--card); border: 1px solid var(--border);
+      margin-bottom: 0.8rem; cursor: pointer; transition: all 0.2s;
+      text-decoration: none;
+    }
+    .modal-item:hover { border-color: var(--gold); }
+    .modal-item-left { display: flex; align-items: center; gap: 1rem; }
+    .modal-item-icon { font-size: 1.3rem; }
+    .modal-item-title { font-size: 0.9rem; font-weight: 600; color: var(--white); }
+    .modal-item-meta { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+    .modal-item-arrow { color: var(--gold); font-size: 1rem; }
+    .modal-item:hover .modal-item-arrow { transform: translateX(4px); }
+    .modal-section-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin: 1.5rem 0 0.8rem; }
+    .modal-section-label:first-child { margin-top: 0; }
+    .modal-note { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.25); padding: 1rem 1.2rem; font-size: 0.82rem; color: var(--muted); line-height: 1.6; margin-top: 1rem; }
+    .modal-note strong { color: var(--gold); }
+    .timetable-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.8rem; }
+    .timetable-card { background: var(--card); border: 1px solid var(--border); padding: 1rem; text-align: center; }
+    .timetable-day { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+    .timetable-info { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+    .event-item { display: flex; gap: 1.2rem; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+    .event-item:last-child { border-bottom: none; }
+    .event-date-box { background: var(--gold); color: var(--navy); min-width: 52px; text-align: center; padding: 0.5rem; flex-shrink: 0; }
+    .event-date-day { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; line-height: 1; }
+    .event-date-month { font-size: 0.6rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .event-info-title { font-size: 0.9rem; font-weight: 600; color: var(--white); margin-bottom: 3px; }
+    .event-info-meta { font-size: 0.75rem; color: var(--muted); }
+    .quicklink-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+    .quicklink-btn {
+      display: flex; align-items: center; gap: 10px;
+      padding: 1rem 1.2rem; background: var(--card); border: 1px solid var(--border);
+      color: var(--white); text-decoration: none; font-size: 0.85rem; font-weight: 500;
+      transition: all 0.2s; cursor: pointer;
+    }
+    .quicklink-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .quicklink-btn span { font-size: 1.2rem; }
+
     .nav-apply {
       background: var(--gold); color: var(--navy);
       border: none; padding: 0.55rem 1.3rem;
@@ -60,30 +192,16 @@
       padding: 8rem 3rem 5rem;
       position: relative; overflow: hidden;
     }
-    .hero-bg {
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, #0a1628 0%, #112240 50%, #0d1f3c 100%);
-    }
+    .hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #0a1628 0%, #112240 50%, #0d1f3c 100%); }
     .hero-pattern {
       position: absolute; inset: 0;
-      background-image: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 40px,
-        rgba(201,168,76,0.03) 40px,
-        rgba(201,168,76,0.03) 41px
-      );
+      background-image: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(201,168,76,0.03) 40px, rgba(201,168,76,0.03) 41px);
     }
-    .hero-glow {
-      position: absolute; top: -200px; right: -200px;
-      width: 700px; height: 700px;
-      background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 65%);
-    }
+    .hero-glow { position: absolute; top: -200px; right: -200px; width: 700px; height: 700px; background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 65%); }
     .hero-aerial {
       position: absolute; inset: 0;
       background: url('https://i.postimg.cc/bNb9TwHX/Whats-App-Image-2026-06-09-at-16-18-13.jpg') center/cover no-repeat;
-      opacity: 0.90;
-      mix-blend-mode: overlay;
+      opacity: 0.90; mix-blend-mode: overlay;
     }
     .hero-content { position: relative; z-index: 2; max-width: 700px; }
     .hero-eyebrow {
@@ -102,40 +220,18 @@
       animation: fadeUp 0.7s ease 0.1s both;
     }
     .hero h1 em { font-style: italic; color: var(--gold); }
-    .hero-motto {
-      margin-top: 1.2rem;
-      font-size: 1rem; font-weight: 300;
-      letter-spacing: 4px; text-transform: uppercase;
-      color: var(--muted);
-      animation: fadeUp 0.7s ease 0.2s both;
-    }
-    .hero-stats {
-      margin-top: 3rem;
-      display: flex; gap: 3rem;
-      animation: fadeUp 0.7s ease 0.3s both;
-    }
-    .hero-stat-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem; font-weight: 700;
-      color: var(--gold); line-height: 1;
-    }
+    .hero-motto { margin-top: 1.2rem; font-size: 1rem; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); animation: fadeUp 0.7s ease 0.2s both; }
+    .hero-stats { margin-top: 3rem; display: flex; gap: 3rem; animation: fadeUp 0.7s ease 0.3s both; }
+    .hero-stat-num { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; color: var(--gold); line-height: 1; }
     .hero-stat-label { font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; }
-    .hero-btns {
-      margin-top: 2.5rem; display: flex; gap: 1rem;
-      animation: fadeUp 0.7s ease 0.4s both;
-    }
+    .hero-btns { margin-top: 2.5rem; display: flex; gap: 1rem; animation: fadeUp 0.7s ease 0.4s both; }
     .btn-gold { background: var(--gold); color: var(--navy); padding: 0.85rem 2rem; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; border: none; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
     .btn-gold:hover { background: var(--gold2); transform: translateY(-2px); }
     .btn-ghost { border: 1px solid rgba(201,168,76,0.4); color: var(--gold); padding: 0.85rem 2rem; font-weight: 500; font-size: 0.85rem; letter-spacing: 1px; background: transparent; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
     .btn-ghost:hover { border-color: var(--gold); background: rgba(201,168,76,0.08); }
 
     /* STRIP */
-    .strip {
-      background: var(--gold);
-      padding: 1rem 3rem;
-      display: flex; align-items: center; justify-content: center; gap: 4rem;
-      flex-wrap: wrap;
-    }
+    .strip { background: var(--gold); padding: 1rem 3rem; display: flex; align-items: center; justify-content: center; gap: 4rem; flex-wrap: wrap; }
     .strip-item { color: var(--navy); font-size: 0.78rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
 
     /* SECTIONS */
@@ -146,24 +242,9 @@
 
     /* ABOUT */
     .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
-    .about-image {
-      position: relative;
-    }
-    .about-img-frame {
-      width: 100%; aspect-ratio: 4/3;
-      background: var(--card);
-      border: 1px solid var(--border);
-      overflow: hidden;
-      position: relative;
-    }
+    .about-img-frame { width: 100%; aspect-ratio: 4/3; background: var(--card); border: 1px solid var(--border); overflow: hidden; position: relative; }
     .about-img-frame img { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; }
-    .about-badge {
-      position: absolute; bottom: -1.5rem; right: -1.5rem;
-      background: var(--gold); color: var(--navy);
-      padding: 1.5rem;
-      font-family: 'Playfair Display', serif;
-      text-align: center;
-    }
+    .about-badge { position: absolute; bottom: -1.5rem; right: -1.5rem; background: var(--gold); color: var(--navy); padding: 1.5rem; font-family: 'Playfair Display', serif; text-align: center; }
     .about-badge-num { font-size: 2.5rem; font-weight: 900; line-height: 1; }
     .about-badge-text { font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Inter', sans-serif; }
     .about-values { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
@@ -174,12 +255,7 @@
 
     /* GRADES */
     .grades-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-bottom: 3rem; }
-    .grade-card {
-      background: var(--card); border: 1px solid var(--border);
-      padding: 1.5rem 1rem; text-align: center;
-      transition: all 0.3s; cursor: default;
-      position: relative; overflow: hidden;
-    }
+    .grade-card { background: var(--card); border: 1px solid var(--border); padding: 1.5rem 1rem; text-align: center; transition: all 0.3s; position: relative; overflow: hidden; }
     .grade-card::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--gold); transform: scaleX(0); transition: transform 0.3s; }
     .grade-card:hover { transform: translateY(-4px); border-color: var(--gold); }
     .grade-card:hover::before { transform: scaleX(1); }
@@ -188,48 +264,93 @@
 
     /* SUBJECTS */
     .subjects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.8rem; }
-    .subject-tag {
-      background: var(--card); border: 1px solid var(--border);
-      padding: 0.75rem 1rem;
-      font-size: 0.82rem; font-weight: 500;
-      display: flex; align-items: center; gap: 0.6rem;
-      transition: all 0.2s;
-    }
+    .subject-tag { background: var(--card); border: 1px solid var(--border); padding: 0.75rem 1rem; font-size: 0.82rem; font-weight: 500; display: flex; align-items: center; gap: 0.6rem; transition: all 0.2s; }
     .subject-tag:hover { border-color: var(--gold); color: var(--gold); }
     .subject-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
 
     /* SPORTS */
     .sports-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-    .sport-card {
-      background: var(--card); border: 1px solid var(--border);
-      padding: 2.5rem 2rem;
-      transition: all 0.3s;
-      position: relative; overflow: hidden;
-    }
+    .sport-card { background: var(--card); border: 1px solid var(--border); padding: 2.5rem 2rem; transition: all 0.3s; position: relative; overflow: hidden; }
     .sport-card:hover { transform: translateY(-5px); border-color: var(--gold); }
     .sport-icon { font-size: 3rem; margin-bottom: 1.2rem; display: block; }
     .sport-card h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.6rem; }
     .sport-card p { color: var(--muted); font-size: 0.85rem; line-height: 1.7; }
 
-    /* LEADERSHIP */
-    .principal-card {
-      background: var(--card); border: 1px solid var(--border);
-      padding: 3rem; display: flex; gap: 3rem; align-items: center;
-      max-width: 700px;
+    /* ===== TEACHERS SLIDER ===== */
+    .teachers-section { background: var(--navy2); }
+    .slider-wrapper { position: relative; }
+    .teachers-slider {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      padding: 0.5rem 0 2rem;
+      scroll-behavior: smooth;
     }
-    .principal-image {
-      width: 120px;
-      height: 120px;
+    .teachers-slider::-webkit-scrollbar { display: none; }
+    .teacher-card {
+      flex: 0 0 220px;
+      scroll-snap-align: start;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .teacher-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+    .teacher-card:hover .teacher-overlay { opacity: 1; }
+    .teacher-img-wrap { width: 100%; aspect-ratio: 3/4; overflow: hidden; position: relative; }
+    .teacher-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.4s; }
+    .teacher-card:hover .teacher-img-wrap img { transform: scale(1.05); }
+    .teacher-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,22,40,0.9) 0%, transparent 50%);
+      opacity: 0.5; transition: opacity 0.3s;
+    }
+    .teacher-info { padding: 1rem; }
+    .teacher-name { font-size: 0.92rem; font-weight: 600; color: var(--white); }
+    .teacher-role { font-size: 0.72rem; color: var(--gold); letter-spacing: 1px; margin-top: 3px; }
+
+    /* Slider arrow buttons */
+    .slider-arrow {
+      position: absolute; top: 50%; transform: translateY(-60%);
+      width: 44px; height: 44px;
+      background: rgba(10,22,40,0.85);
+      border: 1px solid var(--gold);
       border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid var(--gold);
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 10;
+      color: var(--gold); font-size: 1.1rem;
+      transition: all 0.2s;
+      box-shadow: 0 0 20px rgba(201,168,76,0.3);
     }
+    .slider-arrow:hover { background: var(--gold); color: var(--navy); }
+    .slider-arrow.left { left: -22px; }
+    .slider-arrow.right { right: -22px; }
+    .slider-arrow svg { width: 18px; height: 18px; }
+
+    /* Fade edges */
+    .slider-fade-left {
+      position: absolute; left: 0; top: 0; bottom: 0; width: 60px;
+      background: linear-gradient(to right, var(--navy2), transparent);
+      pointer-events: none; z-index: 5;
+    }
+    .slider-fade-right {
+      position: absolute; right: 0; top: 0; bottom: 0; width: 60px;
+      background: linear-gradient(to left, var(--navy2), transparent);
+      pointer-events: none; z-index: 5;
+    }
+
+    /* LEADERSHIP */
+    .principal-card { background: var(--card); border: 1px solid var(--border); padding: 3rem; display: flex; gap: 3rem; align-items: center; max-width: 700px; }
+    .principal-image { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--gold); flex-shrink: 0; }
     .principal-info h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.3rem; }
     .principal-info .role { color: var(--gold); font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; margin-bottom: 1rem; }
     .principal-info p { color: var(--muted); font-size: 0.88rem; line-height: 1.7; }
 
-    /* CONTACT */
+    /* ===== CONTACT ===== */
     .contact-section { background: var(--navy2); }
     .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
     .contact-items { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
@@ -241,7 +362,8 @@
 
     .contact-form { display: flex; flex-direction: column; gap: 1rem; }
     .contact-form h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
-    .form-group label { display: block; font-size: 0.72rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-size: 0.72rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
     .form-group input, .form-group textarea, .form-group select {
       width: 100%; background: var(--navy);
       border: 1px solid var(--border); color: var(--white);
@@ -251,28 +373,40 @@
     .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--gold); }
     .form-group textarea { resize: vertical; min-height: 100px; }
     .form-group select option { background: var(--navy); }
+
+    /* File upload */
+    .file-upload-area {
+      border: 2px dashed var(--border);
+      background: var(--navy);
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .file-upload-area:hover { border-color: var(--gold); background: rgba(201,168,76,0.04); }
+    .file-upload-area.drag-over { border-color: var(--gold); background: rgba(201,168,76,0.08); }
+    .file-upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .file-upload-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .file-upload-text { font-size: 0.82rem; color: var(--muted); }
+    .file-upload-text span { color: var(--gold); font-weight: 600; }
+    .file-list { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.8rem; }
+    .file-item { background: var(--card); border: 1px solid var(--border); padding: 0.5rem 0.8rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.78rem; }
+    .file-item-name { color: var(--white); display: flex; align-items: center; gap: 0.5rem; }
+    .file-remove { color: var(--muted); cursor: pointer; font-size: 1rem; line-height: 1; transition: color 0.2s; background: none; border: none; }
+    .file-remove:hover { color: #e24b4b; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .submit-btn { background: var(--gold); color: var(--navy); border: none; padding: 1rem; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.88rem; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
     .submit-btn:hover { background: var(--gold2); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
     /* WHATSAPP FLOAT */
-    .whatsapp-float {
-      position: fixed; bottom: 2rem; right: 2rem;
-      width: 56px; height: 56px;
-      background: #25d366; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.6rem; text-decoration: none;
-      box-shadow: 0 4px 20px rgba(37,211,102,0.4);
-      z-index: 99; transition: transform 0.2s;
-    }
+    .whatsapp-float { position: fixed; bottom: 2rem; right: 2rem; width: 56px; height: 56px; background: #25d366; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; text-decoration: none; box-shadow: 0 4px 20px rgba(37,211,102,0.4); z-index: 99; transition: transform 0.2s; }
     .whatsapp-float:hover { transform: scale(1.1); }
 
     /* FOOTER */
-    footer {
-      background: #060f1c;
-      border-top: 1px solid var(--border);
-      padding: 2.5rem 3rem;
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
-    }
+    footer { background: #060f1c; border-top: 1px solid var(--border); padding: 2.5rem 3rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
     footer .foot-logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; }
     footer .foot-logo span { color: var(--gold); }
     footer p { color: var(--muted); font-size: 0.78rem; }
@@ -281,10 +415,12 @@
     .footer-links a:hover { color: var(--gold); }
 
     /* TOAST */
-    .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--gold); color: var(--navy); padding: 0.8rem 1.5rem; font-weight: 700; font-size: 0.85rem; opacity: 0; transition: all 0.3s; z-index: 999; white-space: nowrap; }
+    .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--gold); color: var(--navy); padding: 0.8rem 1.5rem; font-weight: 700; font-size: 0.85rem; opacity: 0; transition: all 0.3s; z-index: 999; white-space: nowrap; border-radius: 2px; }
     .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .toast.error { background: #e24b4b; color: white; }
 
     @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
@@ -299,7 +435,9 @@
       footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
       .strip { gap: 1.5rem; padding: 1rem 1.5rem; }
       .principal-card { flex-direction: column; text-align: center; padding: 2rem; }
-      .principal-image { width: 120px; height: 120px; margin-bottom: 1rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .slider-arrow.left { left: 0; }
+      .slider-arrow.right { right: 0; }
     }
   </style>
 </head>
@@ -317,8 +455,52 @@
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#academics">Academics</a></li>
+    <li><a href="#teachers">Teachers</a></li>
     <li><a href="#sports">Sports</a></li>
     <li><a href="#leadership">Leadership</a></li>
+    <li class="nav-dropdown" id="resourcesDropdown">
+      <button class="nav-dropdown-toggle" onclick="toggleDropdown()">
+        Resources
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+      </button>
+      <div class="nav-dropdown-menu">
+        <div class="dropdown-item" onclick="openModal('pastpapers'); closeDropdown()">
+          <span class="dropdown-item-icon">📄</span>
+          <span class="dropdown-item-text">
+            <span class="dropdown-item-label">Past Papers</span>
+            <span class="dropdown-item-sub">Previous exam papers & memos</span>
+          </span>
+        </div>
+        <div class="dropdown-item" onclick="openModal('studyguide'); closeDropdown()">
+          <span class="dropdown-item-icon">📚</span>
+          <span class="dropdown-item-text">
+            <span class="dropdown-item-label">Study Guides</span>
+            <span class="dropdown-item-sub">Notes & revision material</span>
+          </span>
+        </div>
+        <div class="dropdown-item" onclick="openModal('timetable'); closeDropdown()">
+          <span class="dropdown-item-icon">🗓️</span>
+          <span class="dropdown-item-text">
+            <span class="dropdown-item-label">Timetable</span>
+            <span class="dropdown-item-sub">School & exam timetables</span>
+          </span>
+        </div>
+        <div class="dropdown-item" onclick="openModal('events'); closeDropdown()">
+          <span class="dropdown-item-icon">🎉</span>
+          <span class="dropdown-item-text">
+            <span class="dropdown-item-label">Events</span>
+            <span class="dropdown-item-sub">Upcoming school events</span>
+          </span>
+        </div>
+        <div class="dropdown-item" onclick="openModal('quicklinks'); closeDropdown()">
+          <span class="dropdown-item-icon">⚡</span>
+          <span class="dropdown-item-text">
+            <span class="dropdown-item-label">Quick Links</span>
+            <span class="dropdown-item-sub">DBE, NSC, UMALUSI & more</span>
+          </span>
+        </div>
+      </div>
+    </li>
     <li><a href="#contact">Contact</a></li>
   </ul>
   <a href="#contact" class="nav-apply">Enquire Now</a>
@@ -335,18 +517,9 @@
     <h1>Ubulinga<br><em>Secondary School</em></h1>
     <p class="hero-motto">First Things First</p>
     <div class="hero-stats">
-      <div>
-        <div class="hero-stat-num">1000+</div>
-        <div class="hero-stat-label">Learners</div>
-      </div>
-      <div>
-        <div class="hero-stat-num">5</div>
-        <div class="hero-stat-label">Grade Levels</div>
-      </div>
-      <div>
-        <div class="hero-stat-num">1999</div>
-        <div class="hero-stat-label">Established</div>
-      </div>
+      <div><div class="hero-stat-num">1000+</div><div class="hero-stat-label">Learners</div></div>
+      <div><div class="hero-stat-num">5</div><div class="hero-stat-label">Grade Levels</div></div>
+      <div><div class="hero-stat-num">1999</div><div class="hero-stat-label">Established</div></div>
     </div>
     <div class="hero-btns">
       <a href="#about" class="btn-gold">Discover Our School</a>
@@ -363,10 +536,229 @@
   <span class="strip-item">📍 Bergville, KZN</span>
 </div>
 
-<!-- ABOUT -->
+<!-- RESOURCES SECTION -->
+<section class="section resources-section" id="resources">
+  <p class="section-eyebrow">Student Resources</p>
+  <h2 class="section-title">Everything You Need<br>to Succeed</h2>
+  <p class="section-sub">Access past papers, study guides, timetables, upcoming events and important quick links — all in one place.</p>
+  <div class="resources-grid">
+    <div class="resource-card" onclick="openModal('pastpapers')">
+      <div class="resource-card-icon">📄</div>
+      <div class="resource-card-title">Past Papers</div>
+      <div class="resource-card-desc">Download previous exam papers and memos for all grades and subjects.</div>
+      <div class="resource-card-action">Browse papers →</div>
+    </div>
+    <div class="resource-card" onclick="openModal('studyguide')">
+      <div class="resource-card-icon">📚</div>
+      <div class="resource-card-title">Study Guides</div>
+      <div class="resource-card-desc">Revision notes, summaries, and study guides prepared by our educators.</div>
+      <div class="resource-card-action">View guides →</div>
+    </div>
+    <div class="resource-card" onclick="openModal('timetable')">
+      <div class="resource-card-icon">🗓️</div>
+      <div class="resource-card-title">Timetable</div>
+      <div class="resource-card-desc">School timetable, exam schedule, and period breakdown for each grade.</div>
+      <div class="resource-card-action">See timetable →</div>
+    </div>
+    <div class="resource-card" onclick="openModal('events')">
+      <div class="resource-card-icon">🎉</div>
+      <div class="resource-card-title">Events</div>
+      <div class="resource-card-desc">Stay up to date with sports days, prize-giving, parent meetings and more.</div>
+      <div class="resource-card-action">View events →</div>
+    </div>
+    <div class="resource-card" onclick="openModal('quicklinks')">
+      <div class="resource-card-icon">⚡</div>
+      <div class="resource-card-title">Quick Links</div>
+      <div class="resource-card-desc">Direct links to DBE, NSC results, UMALUSI, and other important sites.</div>
+      <div class="resource-card-action">Open links →</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MODALS ===== -->
+<div class="modal-overlay" id="modalOverlay" onclick="overlayClose(event)">
+  <div class="modal" id="modal">
+
+    <!-- PAST PAPERS -->
+    <div id="modal-pastpapers" style="display:none">
+      <div class="modal-header">
+        <div class="modal-title-group"><span class="modal-icon">📄</span><div><div class="modal-title">Past Papers</div><div class="modal-subtitle">All subjects · DBE official papers & memos</div></div></div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+
+        <!-- Search & filter -->
+        <div style="display:flex;gap:0.6rem;margin-bottom:1.2rem;flex-wrap:wrap;">
+          <input id="pp-search" type="text" placeholder="Search subject..." oninput="filterPapers()" style="flex:1;min-width:140px;background:var(--navy);border:1px solid var(--border);color:var(--white);padding:0.6rem 0.9rem;font-family:inherit;font-size:0.83rem;outline:none;"/>
+          <select id="pp-grade" onchange="filterPapers()" style="background:var(--navy);border:1px solid var(--border);color:var(--white);padding:0.6rem 0.9rem;font-family:inherit;font-size:0.83rem;outline:none;cursor:pointer;">
+            <option value="all">All Grades</option>
+            <option value="12">Grade 12 (NSC)</option>
+            <option value="8-11">Grade 8–11</option>
+          </select>
+        </div>
+
+        <div id="pp-count" style="font-size:0.72rem;color:var(--muted);letter-spacing:1px;margin-bottom:1rem;"></div>
+        <div id="pp-list"></div>
+
+        <div class="modal-note" style="margin-top:1rem"><strong>Grade 12 papers</strong> link to the official DBE website. <strong>Grade 8–11</strong> internal papers — contact us on <a href="https://wa.me/27737515380" target="_blank" style="color:var(--gold)">WhatsApp 073 751 5380</a>.</div>
+      </div>
+    </div>
+
+    <!-- STUDY GUIDES -->
+    <div id="modal-studyguide" style="display:none">
+      <div class="modal-header">
+        <div class="modal-title-group"><span class="modal-icon">📚</span><div><div class="modal-title">Study Guides</div><div class="modal-subtitle">Revision notes & study material</div></div></div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-section-label">Free Online Study Resources</div>
+        <a class="modal-item" href="https://www.siyavula.com" target="_blank">
+          <div class="modal-item-left"><span class="modal-item-icon">🌐</span><div><div class="modal-item-title">Siyavula — Free Textbooks</div><div class="modal-item-meta">Maths & Science · Grades 10–12</div></div></div>
+          <span class="modal-item-arrow">→</span>
+        </a>
+        <a class="modal-item" href="https://everythingmaths.co.za" target="_blank">
+          <div class="modal-item-left"><span class="modal-item-icon">📐</span><div><div class="modal-item-title">Everything Maths & Science</div><div class="modal-item-meta">Interactive practice · All grades</div></div></div>
+          <span class="modal-item-arrow">→</span>
+        </a>
+        <a class="modal-item" href="https://www.khanacademy.org" target="_blank">
+          <div class="modal-item-left"><span class="modal-item-icon">🎓</span><div><div class="modal-item-title">Khan Academy</div><div class="modal-item-meta">Video lessons · All subjects</div></div></div>
+          <span class="modal-item-arrow">→</span>
+        </a>
+        <a class="modal-item" href="https://www.mindset.co.za" target="_blank">
+          <div class="modal-item-left"><span class="modal-item-icon">📺</span><div><div class="modal-item-title">Mindset Learn</div><div class="modal-item-meta">Video tutorials · CAPS aligned</div></div></div>
+          <span class="modal-item-arrow">→</span>
+        </a>
+        <div class="modal-section-label">School Study Notes</div>
+        <div class="modal-item" onclick="contactForNotes()">
+          <div class="modal-item-left"><span class="modal-item-icon">📝</span><div><div class="modal-item-title">Request Teacher Notes</div><div class="modal-item-meta">Contact your subject teacher or the school office</div></div></div>
+          <span class="modal-item-arrow">→</span>
+        </div>
+        <div class="modal-note"><strong>Note:</strong> Our educators prepare subject-specific notes each term. Contact the school to request the latest study material for your grade.</div>
+      </div>
+    </div>
+
+    <!-- TIMETABLE -->
+    <div id="modal-timetable" style="display:none">
+      <div class="modal-header">
+        <div class="modal-title-group"><span class="modal-icon">🗓️</span><div><div class="modal-title">Timetable</div><div class="modal-subtitle">Auto-updated from school Google Drive</div></div></div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+
+        <!-- Loading state -->
+        <div id="tt-loading" style="text-align:center;padding:3rem 1rem;">
+          <div style="font-size:2.5rem;margin-bottom:1rem;animation:spin 1.2s linear infinite;display:inline-block">⏳</div>
+          <div style="color:var(--muted);font-size:0.85rem;letter-spacing:1px">Loading latest timetable...</div>
+        </div>
+
+        <!-- No image state -->
+        <div id="tt-empty" style="display:none;text-align:center;padding:3rem 1rem;">
+          <div style="font-size:3rem;margin-bottom:1rem">📭</div>
+          <div style="font-size:1rem;font-weight:600;margin-bottom:0.5rem">No timetable uploaded yet</div>
+          <div style="color:var(--muted);font-size:0.82rem;line-height:1.6;max-width:340px;margin:0 auto">Upload a JPG or PNG image to the school Google Drive folder and it will appear here automatically.</div>
+          <a href="https://drive.google.com/drive/folders/1-o6BTCYw7VeFdOWTP68zYLRNpGciZO0H" target="_blank" style="display:inline-block;margin-top:1.5rem;background:var(--gold);color:var(--navy);padding:0.7rem 1.5rem;font-weight:700;font-size:0.8rem;letter-spacing:1px;text-transform:uppercase;text-decoration:none">Upload to Drive →</a>
+        </div>
+
+        <!-- Timetable image display -->
+        <div id="tt-images" style="display:none">
+          <div id="tt-img-wrap" style="display:flex;flex-direction:column;gap:1rem;"></div>
+          <div style="margin-top:1.5rem;display:flex;gap:0.8rem;flex-wrap:wrap;align-items:center;justify-content:space-between">
+            <div id="tt-updated" style="font-size:0.72rem;color:var(--muted);letter-spacing:1px;"></div>
+            <div style="display:flex;gap:0.8rem;">
+              <button onclick="loadTimetable()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:0.5rem 1rem;font-size:0.75rem;cursor:pointer;letter-spacing:1px;font-family:inherit;transition:all 0.2s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">↻ Refresh</button>
+              <a href="https://drive.google.com/drive/folders/1-o6BTCYw7VeFdOWTP68zYLRNpGciZO0H" target="_blank" style="background:var(--gold);color:var(--navy);padding:0.5rem 1rem;font-weight:700;font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:5px">Upload new ↑</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-note" style="margin-top:1.5rem"><strong>How to update:</strong> Upload a new timetable image (JPG or PNG) to the <a href="https://drive.google.com/drive/folders/1-o6BTCYw7VeFdOWTP68zYLRNpGciZO0H" target="_blank" style="color:var(--gold)">school Google Drive folder</a> and it will appear here within seconds — no website changes needed.</div>
+      </div>
+    </div>
+
+    <!-- EVENTS -->
+    <div id="modal-events" style="display:none">
+      <div class="modal-header">
+        <div class="modal-title-group"><span class="modal-icon">🎉</span><div><div class="modal-title">School Events</div><div class="modal-subtitle">2026 Upcoming events calendar</div></div></div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-section-label">Term 3 — Upcoming</div>
+        <div class="event-item">
+          <div class="event-date-box"><div class="event-date-day">21</div><div class="event-date-month">Jul</div></div>
+          <div><div class="event-info-title">Term 3 Opens</div><div class="event-info-meta">All learners report at 07:30 · Uniform required</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-date-box"><div class="event-date-day">08</div><div class="event-date-month">Aug</div></div>
+          <div><div class="event-info-title">Women's Day — Celebration</div><div class="event-info-meta">School programme · All grades</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-date-box"><div class="event-date-day">15</div><div class="event-date-month">Aug</div></div>
+          <div><div class="event-info-title">Parent-Teacher Meeting</div><div class="event-info-meta">Grade 12 parents · 09:00 – 12:00</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-date-box"><div class="event-date-day">05</div><div class="event-date-month">Sep</div></div>
+          <div><div class="event-info-title">Annual Athletics Day</div><div class="event-info-meta">School sports grounds · All grades compete</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-date-box"><div class="event-date-day">25</div><div class="event-date-month">Sep</div></div>
+          <div><div class="event-info-title">Term 3 Closes</div><div class="event-info-meta">Early dismissal at 12:00</div></div>
+        </div>
+        <div class="modal-section-label">Term 4 — Key Dates</div>
+        <div class="event-item">
+          <div class="event-date-box"><div class="event-date-day">26</div><div class="event-date-month">Oct</div></div>
+          <div><div class="event-info-title">NSC Trial Exams Begin — Grade 12</div><div class="event-info-meta">Matric learners · Formal exam conditions</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-date-box"><div class="event-date-day">20</div><div class="event-date-month">Nov</div></div>
+          <div><div class="event-info-title">Prize-Giving Ceremony</div><div class="event-info-meta">School hall · Parents welcome</div></div>
+        </div>
+        <div class="modal-note"><strong>Note:</strong> Dates are subject to change. Follow our Facebook page for the latest updates and announcements.</div>
+      </div>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div id="modal-quicklinks" style="display:none">
+      <div class="modal-header">
+        <div class="modal-title-group"><span class="modal-icon">⚡</span><div><div class="modal-title">Quick Links</div><div class="modal-subtitle">Important educational websites</div></div></div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-section-label">Government & Official</div>
+        <div class="quicklink-grid">
+          <a class="quicklink-btn" href="https://www.education.gov.za" target="_blank"><span>🏛️</span>Dept. of Basic Education</a>
+          <a class="quicklink-btn" href="https://www.umalusi.org.za" target="_blank"><span>🎓</span>Umalusi</a>
+          <a class="quicklink-btn" href="https://results.kzndoe.gov.za" target="_blank"><span>📊</span>KZN DOE Results</a>
+          <a class="quicklink-btn" href="https://www.nsfas.org.za" target="_blank"><span>💰</span>NSFAS Bursaries</a>
+        </div>
+        <div class="modal-section-label">Study & Learning</div>
+        <div class="quicklink-grid">
+          <a class="quicklink-btn" href="https://www.siyavula.com" target="_blank"><span>📖</span>Siyavula</a>
+          <a class="quicklink-btn" href="https://everythingmaths.co.za" target="_blank"><span>📐</span>Everything Maths</a>
+          <a class="quicklink-btn" href="https://www.khanacademy.org" target="_blank"><span>🎓</span>Khan Academy</a>
+          <a class="quicklink-btn" href="https://www.mindset.co.za" target="_blank"><span>📺</span>Mindset Learn</a>
+        </div>
+        <div class="modal-section-label">Universities & Colleges</div>
+        <div class="quicklink-grid">
+          <a class="quicklink-btn" href="https://www.ukzn.ac.za" target="_blank"><span>🏫</span>UKZN</a>
+          <a class="quicklink-btn" href="https://www.tut.ac.za" target="_blank"><span>🏫</span>TUT</a>
+          <a class="quicklink-btn" href="https://www.dut.ac.za" target="_blank"><span>🏫</span>DUT</a>
+          <a class="quicklink-btn" href="https://www.unisa.ac.za" target="_blank"><span>🏫</span>UNISA</a>
+        </div>
+        <div class="modal-section-label">Contact the School</div>
+        <div class="quicklink-grid">
+          <a class="quicklink-btn" href="https://wa.me/27737515380" target="_blank"><span>💬</span>WhatsApp Us</a>
+          <a class="quicklink-btn" href="mailto:mukeskhumalo794@gmail.com"><span>✉️</span>Email Us</a>
+          <a class="quicklink-btn" href="https://www.facebook.com/search/top?q=ubulinga%20high%20school" target="_blank"><span>📘</span>Facebook Page</a>
+          <a class="quicklink-btn" href="#contact"><span>📋</span>Send Enquiry</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /modal -->
+</div><!-- /modal-overlay -->
 <section class="section" id="about">
   <div class="about-grid">
-    <div class="about-image">
+    <div class="about-image" style="position:relative;">
       <div class="about-img-frame">
         <img src="IMG_7298.PNG" alt="Ubulinga High School aerial view"/>
       </div>
@@ -380,38 +772,19 @@
       <h2 class="section-title">Shaping Tomorrow's<br>Leaders Today</h2>
       <p class="section-sub">Ubulinga Secondary School has been a pillar of education in Bergville, KwaZulu-Natal since 1999. With over 1,000 learners and dedicated educators, we are committed to academic excellence, character development, and community upliftment.</p>
       <div class="about-values">
-        <div class="about-value">
-          <span class="about-value-icon">🎯</span>
-          <div>
-            <h4>Academic Excellence</h4>
-            <p>We set high standards and support every learner to reach their full potential across all subjects.</p>
-          </div>
-        </div>
-        <div class="about-value">
-          <span class="about-value-icon">🤝</span>
-          <div>
-            <h4>Community Values</h4>
-            <p>Rooted in Ubuntu — we grow together, support one another, and give back to our community.</p>
-          </div>
-        </div>
-        <div class="about-value">
-          <span class="about-value-icon">🌟</span>
-          <div>
-            <h4>Holistic Development</h4>
-            <p>Beyond textbooks — sports, arts, and leadership programs shape well-rounded individuals.</p>
-          </div>
-        </div>
+        <div class="about-value"><span class="about-value-icon">🎯</span><div><h4>Academic Excellence</h4><p>We set high standards and support every learner to reach their full potential across all subjects.</p></div></div>
+        <div class="about-value"><span class="about-value-icon">🤝</span><div><h4>Community Values</h4><p>Rooted in Ubuntu — we grow together, support one another, and give back to our community.</p></div></div>
+        <div class="about-value"><span class="about-value-icon">🌟</span><div><h4>Holistic Development</h4><p>Beyond textbooks — sports, arts, and leadership programs shape well-rounded individuals.</p></div></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ACADEMICS -->
-<section class="section" id="academics" style="background: var(--navy2); padding-top: 6rem;">
+<section class="section" id="academics" style="background: var(--navy2);">
   <p class="section-eyebrow">Academics</p>
   <h2 class="section-title">Grades & Subjects</h2>
   <p class="section-sub">We offer a comprehensive curriculum from Grade 8 to Grade 12, preparing learners for university, technical colleges, and the world of work.</p>
-
   <div class="grades-grid">
     <div class="grade-card"><div class="grade-num">8</div><div class="grade-label">Grade</div></div>
     <div class="grade-card"><div class="grade-num">9</div><div class="grade-label">Grade</div></div>
@@ -419,27 +792,150 @@
     <div class="grade-card"><div class="grade-num">11</div><div class="grade-label">Grade</div></div>
     <div class="grade-card"><div class="grade-num">12</div><div class="grade-label">Grade</div></div>
   </div>
-
   <p class="section-eyebrow" style="margin-bottom: 1.5rem;">Subjects Offered</p>
   <div class="subjects-grid">
-   <div class="subject-tag"><span class="subject-dot"></span>English Home Language</div>
-<div class="subject-tag"><span class="subject-dot"></span>IsiZulu First Additional Language</div>
-<div class="subject-tag"><span class="subject-dot"></span>Mathematics</div>
-<div class="subject-tag"><span class="subject-dot"></span>Mathematical Literacy</div>
-<div class="subject-tag"><span class="subject-dot"></span>Physical Sciences</div>
-<div class="subject-tag"><span class="subject-dot"></span>Life Sciences</div>
-<div class="subject-tag"><span class="subject-dot"></span>Geography</div>
-<div class="subject-tag"><span class="subject-dot"></span>History</div>
-<div class="subject-tag"><span class="subject-dot"></span>Accounting</div>
-<div class="subject-tag"><span class="subject-dot"></span>Business Studies</div>
-<div class="subject-tag"><span class="subject-dot"></span>Economics</div>
-<div class="subject-tag"><span class="subject-dot"></span>Life Orientation</div>
-<div class="subject-tag"><span class="subject-dot"></span>Technical Mathematics</div>
-<div class="subject-tag"><span class="subject-dot"></span>Civil Technology</div>
-<div class="subject-tag"><span class="subject-dot"></span>Electrical Technology</div>
-<div class="subject-tag"><span class="subject-dot"></span>Engineering Graphics and Design</div>
-<div class="subject-tag"><span class="subject-dot"></span>Technical Sciences</div>
+    <div class="subject-tag"><span class="subject-dot"></span>English Home Language</div>
+    <div class="subject-tag"><span class="subject-dot"></span>IsiZulu First Additional Language</div>
+    <div class="subject-tag"><span class="subject-dot"></span>Mathematics</div>
+    <div class="subject-tag"><span class="subject-dot"></span>Mathematical Literacy</div>
+    <div class="subject-tag"><span class="subject-dot"></span>Physical Sciences</div>
+    <div class="subject-tag"><span class="subject-dot"></span>Life Sciences</div>
+    <div class="subject-tag"><span class="subject-dot"></span>Geography</div>
+    <div class="subject-tag"><span class="subject-dot"></span>History</div>
+    <div class="subject-tag"><span class="subject-dot"></span>Accounting</div>
+    <div class="subject-tag"><span class="subject-dot"></span>Business Studies</div>
+    <div class="subject-tag"><span class="subject-dot"></span>Economics</div>
+    <div class="subject-tag"><span class="subject-dot"></span>Life Orientation</div>
+    <div class="subject-tag"><span class="subject-dot"></span>Technical Mathematics</div>
+    <div class="subject-tag"><span class="subject-dot"></span>Civil Technology</div>
+    <div class="subject-tag"><span class="subject-dot"></span>Electrical Technology</div>
+    <div class="subject-tag"><span class="subject-dot"></span>Engineering Graphics and Design</div>
+    <div class="subject-tag"><span class="subject-dot"></span>Technical Sciences</div>
   </div>
+</section>
+
+<!-- TEACHERS -->
+<section class="section teachers-section" id="teachers">
+  <p class="section-eyebrow">Our Educators</p>
+  <h2 class="section-title">Meet the Teachers</h2>
+  <p class="section-sub">Dedicated, qualified educators who bring passion and expertise to every classroom at Ubulinga Secondary School.</p>
+
+  <div class="slider-wrapper">
+    <button class="slider-arrow left" onclick="slideTeachers(-1)" aria-label="Previous teachers">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15,18 9,12 15,6"/></svg>
+    </button>
+
+    <div class="slider-fade-left"></div>
+
+    <div class="teachers-slider" id="teachersSlider">
+      <div class="teacher-card">
+        <div class="teacher-img-wrap">
+          <img src="https://i.postimg.cc/g2YpZ64d/64ca9e99-6f87-4c87-974d-de5c233480dd.jpg" alt="TK Zikalala"/>
+          <div class="teacher-overlay"></div>
+        </div>
+        <div class="teacher-info"><div class="teacher-name">TK Zikalala</div><div class="teacher-role">Educator</div></div>
+      </div>
+      <div class="teacher-card">
+        <div class="teacher-img-wrap">
+          <img src="https://i.postimg.cc/cLDptkrw/d87c0e2d-255a-416b-b3ce-f199220c663e.jpg" alt="MA Mchunu"/>
+          <div class="teacher-overlay"></div>
+        </div>
+        <div class="teacher-info"><div class="teacher-name">MA Mchunu</div><div class="teacher-role">Educator</div></div>
+      </div>
+      <div class="teacher-card">
+        <div class="teacher-img-wrap">
+          <img src="https://i.postimg.cc/FR0CpTHv/9c02fa0d-d40e-4170-aab4-6ce31f54115c.jpg" alt="CXH Mbatha"/>
+          <div class="teacher-overlay"></div>
+        </div>
+        <div class="teacher-info"><div class="teacher-name">CXH Mbatha</div><div class="teacher-role">Educator</div></div>
+      </div>
+      <div class="teacher-card">
+        <div class="teacher-img-wrap">
+          <img src="https://i.postimg.cc/L65B6yF9/f984e4fd-80d1-4995-ad20-9eb72b598a6c.jpg" alt="MB Mwesigwa"/>
+          <div class="teacher-overlay"></div>
+        </div>
+        <div class="teacher-info"><div class="teacher-name">MB Mwesigwa</div><div class="teacher-role">Educator</div></div>
+      </div>
+      <div class="teacher-card">
+        <div class="teacher-img-wrap">
+          <img src="https://i.postimg.cc/DfHmL54Y/a09a04bf-2fa5-48c2-af4e-00712f9464ba.jpg" alt="LMJ Nxumalo"/>
+          <div class="teacher-overlay"></div>
+        </div>
+        <div class="teacher-info"><div class="teacher-name">LMJ Nxumalo</div><div class="teacher-role">Educator</div></div>
+      </div>
+      <div class="teacher-card">
+        <div class="teacher-img-wrap">
+          <img src="https://i.postimg.cc/Jnt4BBrt/44c52b34-ac9a-4bb5-8639-2d659a077cb7.jpg" alt="Z Ncube"/>
+          <div class="teacher-overlay"></div>
+        </div>
+        <div class="teacher-info"><div class="teacher-name">Z Ncube</div><div class="teacher-role">Educator</div></div>
+      </div>
+      <div class="teacher-card">
+        <div class="teacher-img-wrap">
+          <img src="https://i.postimg.cc/gjWzttyD/d4d54487-3d2b-4e7b-b2bf-2ac2406715a0.jpg" alt="E Chimbindi"/>
+          <div class="teacher-overlay"></div>
+        </div>
+        <div class="teacher-info"><div class="teacher-name">E Chimbindi</div><div class="teacher-role">Educator</div></div>
+      </div>
+      <div class="teacher-card">
+        <div class="teacher-img-wrap">
+          <img src="https://i.postimg.cc/KYTyXr87/8510ef89-f0fc-4467-8a41-3dfca749b308.jpg" alt="SM Nene"/>
+          <div class="teacher-overlay"></div>
+        </div>
+        <div class="teacher-info"><div class="teacher-name">SM Nene</div><div class="teacher-role">Educator</div></div>
+      </div>
+      <div class="teacher-card">
+        <div class="teacher-img-wrap">
+          <img src="https://i.postimg.cc/PxH9Bgcn/76bcf2d8-0c89-4cb9-ba58-c184e6f0eeb4.jpg" alt="SM Thungo"/>
+          <div class="teacher-overlay"></div>
+        </div>
+        <div class="teacher-info"><div class="teacher-name">SM Thungo</div><div class="teacher-role">Educator</div></div>
+      </div>
+      <div class="teacher-card">
+        <div class="teacher-img-wrap">
+          <img src="https://i.postimg.cc/bJqV6QDS/838d5b2a-56ef-4c78-a32c-64f4bd2ef24c.jpg" alt="SP Mosia"/>
+          <div class="teacher-overlay"></div>
+        </div>
+        <div class="teacher-info"><div class="teacher-name">SP Mosia</div><div class="teacher-role">Educator</div></div>
+      </div>
+      <div class="teacher-card">
+        <div class="teacher-img-wrap">
+          <img src="https://i.postimg.cc/MHvD4tWk/a79534f4-c6ab-4236-8e0c-2078563c55fe.jpg" alt="LJ Maphumulo"/>
+          <div class="teacher-overlay"></div>
+        </div>
+        <div class="teacher-info"><div class="teacher-name">LJ Maphumulo</div><div class="teacher-role">Educator</div></div>
+      </div>
+      <div class="teacher-card">
+        <div class="teacher-img-wrap">
+          <img src="https://i.postimg.cc/L8MtBmZ9/2fc70ced-8fe8-4966-a9da-49487caf3cfb.jpg" alt="TT Mqandi"/>
+          <div class="teacher-overlay"></div>
+        </div>
+        <div class="teacher-info"><div class="teacher-name">TT Mqandi</div><div class="teacher-role">Educator</div></div>
+      </div>
+      <div class="teacher-card">
+        <div class="teacher-img-wrap">
+          <img src="https://i.postimg.cc/h461NxhX/c8cb481a-da32-4fb7-961b-ce00d7cf61f8.jpg" alt="SQ Dube"/>
+          <div class="teacher-overlay"></div>
+        </div>
+        <div class="teacher-info"><div class="teacher-name">SQ Dube</div><div class="teacher-role">Educator</div></div>
+      </div>
+      <div class="teacher-card">
+        <div class="teacher-img-wrap">
+          <img src="https://i.postimg.cc/sD578Nky/fa547b41-c3ee-4d41-8489-04d6e18487b4.jpg" alt="LQ Dlamini"/>
+          <div class="teacher-overlay"></div>
+        </div>
+        <div class="teacher-info"><div class="teacher-name">LQ Dlamini</div><div class="teacher-role">Educator</div></div>
+      </div>
+    </div>
+
+    <div class="slider-fade-right"></div>
+
+    <button class="slider-arrow right" onclick="slideTeachers(1)" aria-label="Next teachers">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg>
+    </button>
+  </div>
+
+  <p style="text-align:center; color:var(--muted); font-size:0.75rem; letter-spacing:2px; text-transform:uppercase; margin-top:1rem;">Scroll or use arrows to see all educators</p>
 </section>
 
 <!-- SPORTS -->
@@ -448,21 +944,9 @@
   <h2 class="section-title">Active Body,<br>Active Mind</h2>
   <p class="section-sub">Sport builds discipline, teamwork, and leadership. At Ubulinga we take pride in our sporting culture and encourage every learner to participate.</p>
   <div class="sports-grid">
-    <div class="sport-card">
-      <span class="sport-icon">⚽</span>
-      <h3>Football</h3>
-      <p>Our football teams compete at district and provincial level. We develop technically skilled and tactically aware players who represent the school with pride.</p>
-    </div>
-    <div class="sport-card">
-      <span class="sport-icon">🏐</span>
-      <h3>Netball</h3>
-      <p>Our netball program builds strong, confident young women. Teams train regularly and compete in KZN league competitions throughout the year.</p>
-    </div>
-    <div class="sport-card">
-      <span class="sport-icon">🏃</span>
-      <h3>Athletics</h3>
-      <p>Annual athletics days and inter-school competitions keep our learners active and healthy, building speed, strength and stamina.</p>
-    </div>
+    <div class="sport-card"><span class="sport-icon">⚽</span><h3>Football</h3><p>Our football teams compete at district and provincial level. We develop technically skilled and tactically aware players who represent the school with pride.</p></div>
+    <div class="sport-card"><span class="sport-icon">🏐</span><h3>Netball</h3><p>Our netball program builds strong, confident young women. Teams train regularly and compete in KZN league competitions throughout the year.</p></div>
+    <div class="sport-card"><span class="sport-icon">🏃</span><h3>Athletics</h3><p>Annual athletics days and inter-school competitions keep our learners active and healthy, building speed, strength and stamina.</p></div>
   </div>
 </section>
 
@@ -472,11 +956,11 @@
   <h2 class="section-title">Our Principal</h2>
   <p class="section-sub">Strong leadership drives our school's vision and ensures every learner gets the best education possible.</p>
   <div class="principal-card">
-    <img class="principal-image" src="https://i.postimg.cc/zGz8jVZM/Whats-App-Image-2026-06-09-at-14-54-14.jpg" alt="Principal Mr MW Mbatha">
+    <img class="principal-image" src="https://i.postimg.cc/zGz8jVZM/Whats-App-Image-2026-06-09-at-14-54-14.jpg" alt="Principal Mr MW Mbatha"/>
     <div class="principal-info">
       <h3>Mr MW Mbatha</h3>
-      <p class="role">Principal – Ubulinga High School</p>
-      <p>Under Mr MW. Mbatha's leadership, Ubulinga High School continues to grow in academic excellence and community impact. His dedication to the motto "First Things First" inspires both staff and learners every day.</p>
+      <p class="role">Principal – Ubulinga Secondary School</p>
+      <p>Under Mr MW Mbatha's leadership, Ubulinga Secondary School continues to grow in academic excellence and community impact. His dedication to the motto "First Things First" inspires both staff and learners every day.</p>
     </div>
   </div>
 </section>
@@ -487,52 +971,37 @@
     <div>
       <p class="section-eyebrow">Get In Touch</p>
       <h2 class="section-title">Contact &<br>Admissions</h2>
-      <p class="section-sub">Interested in enrolling? Have questions? Reach out to us directly.</p>
+      <p class="section-sub">Interested in enrolling? Have questions? Send us a message and attach any relevant documents below.</p>
       <div class="contact-items">
-        <div class="contact-item">
-          <div class="contact-icon">📍</div>
-          <div>
-            <h4>Location</h4>
-            <p>Bergville, KwaZulu-Natal, South Africa</p>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon">📱</div>
-          <div>
-            <h4>WhatsApp / Call</h4>
-            <a href="https://wa.me/27737515380">073 751 5380</a>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon">✉️</div>
-          <div>
-            <h4>Email</h4>
-            <a href="mailto:mukeskhumalo794@gmail.com">mukeskhumalo794@gmail.com</a>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon">📘</div>
-          <div>
-            <h4>Facebook</h4>
-            <a href="https://www.facebook.com/search/top?q=ubulinga%20high%20school" target="_blank">Ubulinga Secondary School</a>
-          </div>
-        </div>
+        <div class="contact-item"><div class="contact-icon">📍</div><div><h4>Location</h4><p>Bergville, KwaZulu-Natal, South Africa</p></div></div>
+        <div class="contact-item"><div class="contact-icon">📱</div><div><h4>WhatsApp / Call</h4><a href="https://wa.me/27737515380">073 751 5380</a></div></div>
+        <div class="contact-item"><div class="contact-icon">✉️</div><div><h4>Email</h4><a href="mailto:mukeskhumalo794@gmail.com">mukeskhumalo794@gmail.com</a></div></div>
+        <div class="contact-item"><div class="contact-icon">📘</div><div><h4>Facebook</h4><a href="https://www.facebook.com/search/top?q=ubulinga%20high%20school" target="_blank">Ubulinga Secondary School</a></div></div>
       </div>
     </div>
     <div>
       <div class="contact-form">
         <h3>Send an Enquiry</h3>
-        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 1rem;">We'll get back to you within 24 hours.</p>
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="e-name" placeholder="Your full name"/>
+        <p style="color:var(--muted);font-size:0.85rem;margin-bottom:1rem;">Fill in your details and attach any documents (reports, ID copies, parent documents, etc.).</p>
+
+        <div class="form-row">
+          <div class="form-group"><label>Learner's Full Name</label><input type="text" id="e-name" placeholder="Full name"/></div>
+          <div class="form-group"><label>Grade Applying For</label>
+            <select id="e-grade">
+              <option value="">Select grade</option>
+              <option>Grade 8</option><option>Grade 9</option><option>Grade 10</option><option>Grade 11</option><option>Grade 12</option>
+            </select>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Phone / WhatsApp</label>
-          <input type="tel" id="e-phone" placeholder="+27 000 000 0000"/>
+
+        <div class="form-row">
+          <div class="form-group"><label>Parent / Guardian Name</label><input type="text" id="e-parent" placeholder="Parent full name"/></div>
+          <div class="form-group"><label>Phone / WhatsApp</label><input type="tel" id="e-phone" placeholder="+27 000 000 0000"/></div>
         </div>
-        <div class="form-group">
-          <label>Enquiry Type</label>
+
+        <div class="form-group"><label>Email Address</label><input type="email" id="e-email" placeholder="your@email.com"/></div>
+
+        <div class="form-group"><label>Enquiry Type</label>
           <select id="e-type">
             <option>Admissions / Enrolment</option>
             <option>Academic Information</option>
@@ -540,11 +1009,22 @@
             <option>General Enquiry</option>
           </select>
         </div>
+
+        <div class="form-group"><label>Message</label><textarea id="e-msg" placeholder="How can we help you?"></textarea></div>
+
+        <!-- FILE UPLOAD -->
         <div class="form-group">
-          <label>Message</label>
-          <textarea id="e-msg" placeholder="How can we help you?"></textarea>
+          <label>Attach Documents</label>
+          <div class="file-upload-area" id="dropZone">
+            <input type="file" id="e-files" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onchange="handleFiles(this.files)"/>
+            <div class="file-upload-icon">📎</div>
+            <div class="file-upload-text">Drag & drop files here or <span>browse</span></div>
+            <div style="font-size:0.72rem;color:var(--muted);margin-top:4px;">Reports, ID copies, parent documents — PDF, Word, or images (max 10MB each)</div>
+          </div>
+          <div class="file-list" id="fileList"></div>
         </div>
-        <button class="submit-btn" onclick="sendEnquiry()">Send Enquiry →</button>
+
+        <button class="submit-btn" id="submitBtn" onclick="sendEnquiry()">Send Enquiry →</button>
       </div>
     </div>
   </div>
@@ -553,10 +1033,12 @@
 <!-- FOOTER -->
 <footer>
   <div class="foot-logo">Ubulinga <span>Secondary School</span></div>
-  <p>© 2026 Ubulinga High School · Bergville, KZN · First Things First</p>
+  <p>© 2026 Ubulinga Secondary School · Bergville, KZN · First Things First</p>
   <div class="footer-links">
     <a href="#about">About</a>
     <a href="#academics">Academics</a>
+    <a href="#resources">Resources</a>
+    <a href="#teachers">Teachers</a>
     <a href="#contact">Contact</a>
   </div>
 </footer>
@@ -568,27 +1050,311 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  async function sendEnquiry() {
-    const name = document.getElementById('e-name').value.trim();
-    const phone = document.getElementById('e-phone').value.trim();
-    const type = document.getElementById('e-type').value;
-    const msg = document.getElementById('e-msg').value.trim();
-    if (!name || !phone) { showToast('⚠️ Please fill in your name and phone'); return; }
-    try {
-      await fetch('https://formspree.io/f/mbdegada', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          _subject: '📚 School Enquiry from ' + name,
-          Name: name, Phone: phone,
-          'Enquiry Type': type, Message: msg || 'No message provided'
-        })
-      });
-    } catch(e) {}
-    showToast('✓ Enquiry sent! We\'ll contact you soon.');
-    document.getElementById('e-name').value = '';
-    document.getElementById('e-phone').value = '';
-    document.getElementById('e-msg').value = '';
+  /* ===== PAST PAPERS ===== */
+  const DBE = 'https://www.education.gov.za/Curriculum/NationalSeniorCertificate(NSC)Examinations/NSCPastExaminationpapers.aspx';
+  const WA  = 'https://wa.me/27737515380?text=Hello%2C%20I%20would%20like%20to%20request%20internal%20exam%20papers.';
+
+  const PAPERS = [
+    { grade:'12', icon:'📐', name:'Mathematics',                        meta:'Paper 1 & 2 · Memo included',          url: DBE },
+    { grade:'12', icon:'📊', name:'Mathematical Literacy',              meta:'Paper 1 & 2 · Memo included',          url: DBE },
+    { grade:'12', icon:'🔬', name:'Physical Sciences',                  meta:'Physics P1 & Chemistry P2 · Memo',     url: DBE },
+    { grade:'12', icon:'🌱', name:'Life Sciences',                      meta:'Paper 1 & 2 · Memo included',          url: DBE },
+    { grade:'12', icon:'📖', name:'English Home Language',              meta:'Paper 1, 2 & 3 · All years',           url: DBE },
+    { grade:'12', icon:'🗣️', name:'IsiZulu First Additional Language',  meta:'Paper 1, 2 & 3 · All years',           url: DBE },
+    { grade:'12', icon:'🌍', name:'Geography',                          meta:'Paper 1 & 2 · Memo included',          url: DBE },
+    { grade:'12', icon:'📜', name:'History',                            meta:'Paper 1 & 2 · Memo included',          url: DBE },
+    { grade:'12', icon:'💰', name:'Accounting',                         meta:'Single paper · Memo included',         url: DBE },
+    { grade:'12', icon:'🏢', name:'Business Studies',                   meta:'Single paper · Memo included',         url: DBE },
+    { grade:'12', icon:'📈', name:'Economics',                          meta:'Paper 1 & 2 · Memo included',          url: DBE },
+    { grade:'12', icon:'❤️', name:'Life Orientation',                   meta:'Common tasks · Portfolio guidelines',   url: DBE },
+    { grade:'12', icon:'📐', name:'Technical Mathematics',              meta:'Paper 1 & 2 · Memo included',          url: DBE },
+    { grade:'12', icon:'🏗️', name:'Civil Technology',                   meta:'Single paper · Memo included',         url: DBE },
+    { grade:'12', icon:'⚡', name:'Electrical Technology',              meta:'Single paper · Memo included',         url: DBE },
+    { grade:'12', icon:'📏', name:'Engineering Graphics & Design',      meta:'Single paper · Memo included',         url: DBE },
+    { grade:'12', icon:'🔭', name:'Technical Sciences',                 meta:'Paper 1 & 2 · Memo included',          url: DBE },
+    { grade:'8-11', icon:'📐', name:'Mathematics (Gr 8–11)',            meta:'Contact school · Internal papers',      url: WA  },
+    { grade:'8-11', icon:'📊', name:'Mathematical Literacy (Gr 9–11)',  meta:'Contact school · Internal papers',      url: WA  },
+    { grade:'8-11', icon:'🔬', name:'Natural Sciences (Gr 8–9)',        meta:'Contact school · Internal papers',      url: WA  },
+    { grade:'8-11', icon:'🔬', name:'Physical Sciences (Gr 10–11)',     meta:'Contact school · Internal papers',      url: WA  },
+    { grade:'8-11', icon:'🌱', name:'Life Sciences (Gr 10–11)',         meta:'Contact school · Internal papers',      url: WA  },
+    { grade:'8-11', icon:'📖', name:'English Home Language (Gr 8–11)',  meta:'Contact school · Internal papers',      url: WA  },
+    { grade:'8-11', icon:'🗣️', name:'IsiZulu FAL (Gr 8–11)',           meta:'Contact school · Internal papers',      url: WA  },
+    { grade:'8-11', icon:'🌍', name:'Geography (Gr 10–11)',             meta:'Contact school · Internal papers',      url: WA  },
+    { grade:'8-11', icon:'📜', name:'History (Gr 10–11)',               meta:'Contact school · Internal papers',      url: WA  },
+    { grade:'8-11', icon:'💰', name:'Accounting (Gr 10–11)',            meta:'Contact school · Internal papers',      url: WA  },
+    { grade:'8-11', icon:'🏢', name:'Business Studies (Gr 10–11)',      meta:'Contact school · Internal papers',      url: WA  },
+    { grade:'8-11', icon:'📈', name:'Economics (Gr 10–11)',             meta:'Contact school · Internal papers',      url: WA  },
+    { grade:'8-11', icon:'🌍', name:'Social Sciences (Gr 8–9)',         meta:'Contact school · Internal papers',      url: WA  },
+    { grade:'8-11', icon:'❤️', name:'Life Orientation (Gr 8–11)',       meta:'Contact school · Internal papers',      url: WA  },
+    { grade:'8-11', icon:'🏗️', name:'Civil Technology (Gr 10–11)',      meta:'Contact school · Internal papers',      url: WA  },
+    { grade:'8-11', icon:'⚡', name:'Electrical Technology (Gr 10–11)', meta:'Contact school · Internal papers',      url: WA  },
+    { grade:'8-11', icon:'📏', name:'EGD (Gr 10–11)',                   meta:'Contact school · Internal papers',      url: WA  },
+  ];
+
+  function renderPapers(list) {
+    const container = document.getElementById('pp-list');
+    const countEl   = document.getElementById('pp-count');
+    container.innerHTML = '';
+    countEl.textContent = list.length + ' subject' + (list.length !== 1 ? 's' : '') + ' found';
+
+    if (list.length === 0) {
+      container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:0.85rem;">No subjects match your search.</div>';
+      return;
+    }
+
+    let lastGrade = '';
+    list.forEach(p => {
+      if (p.grade !== lastGrade) {
+        const lbl = document.createElement('div');
+        lbl.className = 'modal-section-label';
+        lbl.style.marginTop = lastGrade ? '1.5rem' : '0';
+        lbl.textContent = p.grade === '12' ? 'Grade 12 — NSC Matric Papers (DBE Official)' : 'Grade 8–11 — Internal School Papers';
+        container.appendChild(lbl);
+        lastGrade = p.grade;
+      }
+      const isInternal = p.grade === '8-11';
+      const a = document.createElement('a');
+      a.className = 'modal-item';
+      a.href = p.url;
+      a.target = '_blank';
+      a.innerHTML = `
+        <div class="modal-item-left">
+          <span class="modal-item-icon">${p.icon}</span>
+          <div>
+            <div class="modal-item-title">${p.name}</div>
+            <div class="modal-item-meta">${p.meta}</div>
+          </div>
+        </div>
+        <span class="modal-item-arrow" style="font-size:0.75rem;color:${isInternal ? '#25d366' : 'var(--gold)'};">${isInternal ? '💬' : '→'}</span>`;
+      container.appendChild(a);
+    });
   }
 
-  function
+  function filterPapers() {
+    const q     = document.getElementById('pp-search').value.toLowerCase();
+    const grade = document.getElementById('pp-grade').value;
+    const list  = PAPERS.filter(p => {
+      const matchGrade = grade === 'all' || p.grade === grade;
+      const matchQ     = p.name.toLowerCase().includes(q);
+      return matchGrade && matchQ;
+    });
+    renderPapers(list);
+  }
+
+  /* ===== TIMETABLE — GOOGLE DRIVE AUTO LOADER ===== */
+  const DRIVE_FOLDER_ID = '1-o6BTCYw7VeFdOWTP68zYLRNpGciZO0H';
+  const DRIVE_API_KEY   = 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'; // public read-only key
+
+  async function loadTimetable() {
+    const loading = document.getElementById('tt-loading');
+    const empty   = document.getElementById('tt-empty');
+    const images  = document.getElementById('tt-images');
+    const wrap    = document.getElementById('tt-img-wrap');
+    const updated = document.getElementById('tt-updated');
+
+    loading.style.display = 'block';
+    empty.style.display   = 'none';
+    images.style.display  = 'none';
+    wrap.innerHTML = '';
+
+    try {
+      const q = encodeURIComponent(`'${DRIVE_FOLDER_ID}' in parents and (mimeType='image/jpeg' or mimeType='image/png') and trashed=false`);
+      const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,modifiedTime)&orderBy=modifiedTime desc&key=${DRIVE_API_KEY}`;
+      const res  = await fetch(url);
+      const data = await res.json();
+      const files = data.files || [];
+
+      loading.style.display = 'none';
+
+      if (files.length === 0) {
+        empty.style.display = 'block';
+        return;
+      }
+
+      files.forEach((file, i) => {
+        const label = document.createElement('div');
+        label.style.cssText = 'font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem;' + (i > 0 ? 'margin-top:1.5rem;' : '');
+        label.textContent = file.name.replace(/\.[^.]+$/, '');
+        wrap.appendChild(label);
+
+        const img = document.createElement('img');
+        img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w1200`;
+        img.alt = file.name;
+        img.style.cssText = 'width:100%;border:1px solid var(--border);display:block;cursor:zoom-in;';
+        img.onclick = () => window.open(`https://drive.google.com/file/d/${file.id}/view`, '_blank');
+        img.onerror = () => {
+          img.src = `https://lh3.googleusercontent.com/d/${file.id}`;
+        };
+        wrap.appendChild(img);
+      });
+
+      const latest = new Date(files[0].modifiedTime);
+      updated.textContent = 'Last updated: ' + latest.toLocaleDateString('en-ZA', { day:'numeric', month:'long', year:'numeric' });
+      images.style.display = 'block';
+
+    } catch(err) {
+      loading.style.display = 'none';
+      empty.style.display   = 'block';
+      empty.querySelector('div:nth-child(2)').textContent = 'Could not load timetable';
+      empty.querySelector('div:nth-child(3)').textContent = 'Please check your connection and try again.';
+    }
+  }
+
+  /* ===== DROPDOWN ===== */
+  function toggleDropdown() {
+    document.getElementById('resourcesDropdown').classList.toggle('open');
+  }
+  function closeDropdown() {
+    document.getElementById('resourcesDropdown').classList.remove('open');
+  }
+  document.addEventListener('click', function(e) {
+    if (!document.getElementById('resourcesDropdown').contains(e.target)) closeDropdown();
+  });
+
+  /* ===== MODALS ===== */
+  let currentModal = null;
+  function openModal(id) {
+    document.querySelectorAll('[id^="modal-"]').forEach(el => el.style.display = 'none');
+    document.getElementById('modal-' + id).style.display = 'block';
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    currentModal = id;
+    if (id === 'timetable') loadTimetable();
+    if (id === 'pastpapers') { document.getElementById('pp-search').value=''; document.getElementById('pp-grade').value='all'; renderPapers(PAPERS); }
+  }
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+    currentModal = null;
+  }
+  function overlayClose(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  function contactForPaper() {
+    closeModal();
+    window.open('https://wa.me/27737515380?text=Hello%2C%20I%20would%20like%20to%20request%20internal%20exam%20papers.', '_blank');
+  }
+  function contactForNotes() {
+    closeModal();
+    window.open('https://wa.me/27737515380?text=Hello%2C%20I%20would%20like%20to%20request%20study%20notes.', '_blank');
+  }
+
+  /* ===== TEACHER SLIDER ===== */
+  function slideTeachers(dir) {
+    const slider = document.getElementById('teachersSlider');
+    const cardWidth = 220 + 24; // card width + gap
+    slider.scrollBy({ left: dir * cardWidth * 3, behavior: 'smooth' });
+  }
+
+  /* ===== FILE UPLOAD ===== */
+  let selectedFiles = [];
+
+  function handleFiles(files) {
+    Array.from(files).forEach(file => {
+      if (file.size > 10 * 1024 * 1024) {
+        showToast('⚠️ ' + file.name + ' is too large (max 10MB)', true);
+        return;
+      }
+      if (!selectedFiles.find(f => f.name === file.name && f.size === file.size)) {
+        selectedFiles.push(file);
+      }
+    });
+    renderFileList();
+  }
+
+  function renderFileList() {
+    const list = document.getElementById('fileList');
+    list.innerHTML = '';
+    selectedFiles.forEach((file, i) => {
+      const ext = file.name.split('.').pop().toUpperCase();
+      const icons = { PDF: '📄', DOC: '📝', DOCX: '📝', JPG: '🖼️', JPEG: '🖼️', PNG: '🖼️' };
+      const icon = icons[ext] || '📎';
+      const div = document.createElement('div');
+      div.className = 'file-item';
+      div.innerHTML = `<span class="file-item-name">${icon} ${file.name} <span style="color:var(--muted)">(${(file.size/1024).toFixed(0)}KB)</span></span><button class="file-remove" onclick="removeFile(${i})" title="Remove">✕</button>`;
+      list.appendChild(div);
+    });
+  }
+
+  function removeFile(i) {
+    selectedFiles.splice(i, 1);
+    renderFileList();
+  }
+
+  /* Drag & drop */
+  const dropZone = document.getElementById('dropZone');
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    handleFiles(e.dataTransfer.files);
+  });
+
+  /* ===== ENQUIRY SUBMIT ===== */
+  async function sendEnquiry() {
+    const name    = document.getElementById('e-name').value.trim();
+    const parent  = document.getElementById('e-parent').value.trim();
+    const phone   = document.getElementById('e-phone').value.trim();
+    const email   = document.getElementById('e-email').value.trim();
+    const grade   = document.getElementById('e-grade').value;
+    const type    = document.getElementById('e-type').value;
+    const msg     = document.getElementById('e-msg').value.trim();
+
+    if (!name || !phone) { showToast('⚠️ Please fill in the learner name and phone number', true); return; }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    try {
+      const formData = new FormData();
+      formData.append('_subject', '📚 School Enquiry — ' + name + ' (' + type + ')');
+      formData.append('Learner Name', name);
+      formData.append('Grade', grade || 'Not specified');
+      formData.append('Parent / Guardian', parent || 'Not provided');
+      formData.append('Phone', phone);
+      formData.append('Email', email || 'Not provided');
+      formData.append('Enquiry Type', type);
+      formData.append('Message', msg || 'No message provided');
+
+      selectedFiles.forEach((file, i) => {
+        formData.append('attachment_' + (i + 1), file, file.name);
+      });
+
+      await fetch('https://formspree.io/f/mbdegada', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formData
+      });
+
+      showToast('✓ Enquiry sent! We\'ll contact you within 24 hours.');
+      document.getElementById('e-name').value = '';
+      document.getElementById('e-parent').value = '';
+      document.getElementById('e-phone').value = '';
+      document.getElementById('e-email').value = '';
+      document.getElementById('e-msg').value = '';
+      document.getElementById('e-grade').value = '';
+      selectedFiles = [];
+      renderFileList();
+    } catch(e) {
+      showToast('⚠️ Something went wrong. Please try WhatsApp instead.', true);
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Send Enquiry →';
+  }
+
+  /* ===== TOAST ===== */
+  function showToast(msg, isError) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isError ? ' error' : '');
+    void t.offsetWidth;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 4000);
+  }
+</script>
+</body>
+</html>
